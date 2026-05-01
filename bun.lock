@@ -85,6 +85,7 @@
       "name": "@test-evals/db",
       "dependencies": {
         "@test-evals/env": "workspace:*",
+        "@test-evals/shared": "workspace:*",
         "dotenv": "catalog:",
         "drizzle-orm": "^0.45.1",
         "pg": "^8.17.1",
@@ -109,6 +110,14 @@
       "devDependencies": {
         "@test-evals/config": "workspace:*",
         "@types/bun": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/shared": {
+      "name": "@test-evals/shared",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@test-evals/config": "workspace:*",
         "typescript": "catalog:",
       },
     },
@@ -526,6 +535,8 @@
     "@test-evals/db": ["@test-evals/db@workspace:packages/db"],
 
     "@test-evals/env": ["@test-evals/env@workspace:packages/env"],
+
+    "@test-evals/shared": ["@test-evals/shared@workspace:packages/shared"],
 
     "@test-evals/ui": ["@test-evals/ui@workspace:packages/ui"],
 
