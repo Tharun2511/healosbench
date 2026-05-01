@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "test-evals",
-  description: "test-evals",
+  title: "HealOSBench",
+  description: "Benchmark LLM prompt strategies on clinical transcript extraction",
 };
 
 export default function RootLayout({
