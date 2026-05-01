@@ -50,7 +50,7 @@ function normalizeDose(dose: string | null): string {
 
 // Maps common frequency abbreviations to a canonical form.
 // "BID" == "twice daily" == "twice a day" → all become "twice_daily"
-function normalizeFrequency(freq: string | null): string {
+export function normalizeFrequency(freq: string | null): string {
   if (!freq) return ""
   const f = normalize(freq)
   if (/\b(bid|twice daily|twice a day|two times daily|2x daily)\b/.test(f)) return "twice_daily"
@@ -69,7 +69,7 @@ function normalizeFrequency(freq: string | null): string {
 
 // Calculates precision, recall, and F1 for two lists using a custom matcher.
 // Example: predictions=[A,B,C], golds=[A,B,D] → 2 matches → P=0.67, R=0.67, F1=0.67
-function setF1<T>(
+export function setF1<T>(
   predictions: T[],
   golds: T[],
   matches: (pred: T, gold: T) => boolean,
@@ -109,7 +109,7 @@ function scoreChiefComplaint(pred: string, gold: string): number {
   return fuzzyScore(pred, gold)
 }
 
-function scoreVitals(pred: ClinicalExtraction["vitals"], gold: ClinicalExtraction["vitals"]): VitalsScore {
+export function scoreVitals(pred: ClinicalExtraction["vitals"], gold: ClinicalExtraction["vitals"]): VitalsScore {
   // bp is a string ("122/78") — normalize then exact match
   const bpScore = (() => {
     if (pred.bp === null && gold.bp === null) return 1
@@ -137,7 +137,7 @@ function scoreVitals(pred: ClinicalExtraction["vitals"], gold: ClinicalExtractio
 //  1. Name fuzzy score > 0.7 (handles "ibuprofen" vs "Ibuprofen 200")
 //  2. Normalized dose matches exactly ("10mg" == "10 mg")
 //  3. Normalized frequency matches ("BID" == "twice daily")
-function medicationMatches(pred: Medication, gold: Medication): boolean {
+export function medicationMatches(pred: Medication, gold: Medication): boolean {
   const nameScore = fuzzyScore(pred.name, gold.name)
   if (nameScore < 0.7) return false
   const doseMatch =
@@ -202,7 +202,7 @@ function isGrounded(value: string, transcriptNormalized: string): boolean {
   return foundWords.length / words.length >= 0.5
 }
 
-function detectHallucinations(
+export function detectHallucinations(
   prediction: ClinicalExtraction,
   transcript: string,
 ): HallucinationFlag[] {

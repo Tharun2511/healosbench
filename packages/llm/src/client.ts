@@ -6,7 +6,17 @@ import { extractionTool } from "./tool-definition"
 import { strategies } from "./strategies/index"
 import { hashPrompt } from "./prompt-hash"
 
-const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+// Lazily created so tests can inject a mock before first use
+let _client: Anthropic | null = null
+
+function getClient(): Anthropic {
+  return (_client ??= new Anthropic({ apiKey: env.ANTHROPIC_API_KEY }))
+}
+
+// Inject a mock Anthropic client in tests — never call in production
+export function _setAnthropicForTesting(client: Anthropic | null) {
+  _client = client
+}
 
 // Haiku 4.5 pricing per token (USD) — verify at anthropic.com/pricing
 const PRICING = {
@@ -37,7 +47,10 @@ async function loadValidator() {
   const { default: addFormats } = await import("ajv-formats")
   const schemaPath = resolve(import.meta.dir, "../../../data/schema.json")
   const schema = await Bun.file(schemaPath).json()
-  const ajv = new Ajv({ allErrors: true })
+  // validateSchema: false — skip meta-validation of the schema itself.
+  // data/schema.json declares $schema: 2020-12 which AJV 8 doesn't bundle
+  // by default; we only need to validate *data* against the schema, not the schema itself.
+  const ajv = new Ajv({ allErrors: true, validateSchema: false })
   addFormats(ajv)
   return ajv.compile(schema)
 }
@@ -101,7 +114,7 @@ export async function extract(
     // Call Anthropic with rate-limit retry and exponential backoff
     for (let rlAttempt = 0; rlAttempt < MAX_RATE_LIMIT_RETRIES; rlAttempt++) {
       try {
-        rawResponse = await anthropic.messages.create({
+        rawResponse = await getClient().messages.create({
           model,
           max_tokens: 1024,
           tools: [extractionTool],
@@ -118,7 +131,12 @@ export async function extract(
         })
         break
       } catch (err) {
-        const isRateLimit = err instanceof Anthropic.APIError && err.status === 429
+        // Duck-type check — works with both the real SDK and test mocks
+        const isRateLimit =
+          typeof err === "object" &&
+          err !== null &&
+          "status" in err &&
+          (err as { status: number }).status === 429
         if (isRateLimit && rlAttempt < MAX_RATE_LIMIT_RETRIES - 1) {
           await sleep(Math.min(2 ** rlAttempt * 2000, 30000))
           continue

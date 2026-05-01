@@ -1,4 +1,4 @@
-export { extract } from "./client"
+export { extract, _setAnthropicForTesting } from "./client"
 export type { ExtractResult } from "./client"
 export { hashPrompt } from "./prompt-hash"
 export { strategies } from "./strategies/index"
