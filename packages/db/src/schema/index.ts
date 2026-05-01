@@ -1,2 +1,2 @@
-export * from "./auth.ts"
-export * from "./eval.ts"
+export * from "./auth"
+export * from "./eval"

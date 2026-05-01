@@ -1,5 +1,5 @@
-import type { ClinicalExtraction } from "./extraction.ts"
-import type { FieldScores, HallucinationFlag } from "./metrics.ts"
+import type { ClinicalExtraction } from "./extraction"
+import type { FieldScores, HallucinationFlag } from "./metrics"
 
 // One attempt in the retry loop — stored so you can inspect what went wrong
 export type LlmTrace = {

@@ -9,9 +9,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
-import type { ClinicalExtraction } from "@test-evals/shared"
-import type { FieldScores, HallucinationFlag } from "@test-evals/shared"
-import type { LlmTrace } from "@test-evals/shared"
+import type { ClinicalExtraction, FieldScores, HallucinationFlag } from "@test-evals/shared"
 
 // ─── runs ────────────────────────────────────────────────────────────────────
 // One row per eval run (e.g. "zero_shot on all 50 cases started at 10am")
