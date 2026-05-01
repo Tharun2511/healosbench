@@ -8,7 +8,6 @@
  *   bun run eval -- --strategy=zero_shot --cases=case_001,case_002,case_003
  */
 
-import "dotenv/config"
 import { EventEmitter } from "events"
 import { hashPrompt, strategies } from "@test-evals/llm"
 import type { PromptStrategy } from "@test-evals/shared"

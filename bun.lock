@@ -6,6 +6,8 @@
       "name": "test-evals",
       "dependencies": {
         "@test-evals/env": "workspace:*",
+        "@test-evals/llm": "workspace:*",
+        "@test-evals/shared": "workspace:*",
         "dotenv": "catalog:",
         "zod": "catalog:",
       },

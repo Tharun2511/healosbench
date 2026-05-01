@@ -33,11 +33,13 @@
     "db:studio": "turbo -F @test-evals/db db:studio",
     "db:generate": "turbo -F @test-evals/db db:generate",
     "db:migrate": "turbo -F @test-evals/db db:migrate",
-    "eval": "bun run scripts/eval.ts",
+    "eval": "bun --env-file=apps/server/.env run scripts/eval.ts",
     "test": "bun test tests/"
   },
   "dependencies": {
     "@test-evals/env": "workspace:*",
+    "@test-evals/llm": "workspace:*",
+    "@test-evals/shared": "workspace:*",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
